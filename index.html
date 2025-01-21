@@ -3,70 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Samaël Seronvalle - Skyblog</title>
+    <title>Montres Élégantes</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #ffcccc;
-            color: #333;
-            text-align: center;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #111;
+            color: #fff;
+            overflow-x: hidden;
         }
         header {
-            background-color: #ff6666;
-            padding: 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
         }
         header h1 {
-            font-size: 2em;
-            color: white;
-            text-shadow: 1px 1px 2px black;
+            font-size: 1.8em;
+            letter-spacing: 2px;
+            margin: 0;
         }
-        .image-container {
-            margin: 20px auto;
-            max-width: 400px;
+        .hero {
+            height: 100vh;
+            background: url('https://via.placeholder.com/1920x1080') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
         }
-        .image-container img {
+        .hero h2 {
+            font-size: 3em;
+            color: #fff;
+            text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1.5s ease, transform 1.5s ease;
+        }
+        .hero.show h2 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .model {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .model h3 {
+            font-size: 3em;
+            color: #fff;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1.5s ease, transform 1.5s ease;
+            position: absolute;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+        }
+        .model img {
             width: 100%;
-            border: 3px solid #333;
-            box-shadow: 0 0 10px #555;
+            height: auto;
+            transform: translateY(100%);
+            transition: transform 1.5s ease-in-out;
         }
-        .info {
-            background-color: white;
-            border: 2px solid #ff6666;
-            padding: 20px;
-            margin: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .model button {
+            position: absolute;
+            bottom: 20px;
+            padding: 10px 20px;
+            background-color: #c69c6d;
+            border: none;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1.5s ease, transform 1.5s ease;
         }
-        footer {
-            margin-top: 30px;
-            background-color: #ff6666;
-            padding: 10px;
-            color: white;
+        .model button:hover {
+            background-color: #b57a50;
+        }
+        .model.show h3,
+        .model.show button {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .model.show img {
+            transform: translateY(0);
+        }
+        .model.hide h3,
+        .model.hide button {
+            opacity: 0;
+            transform: translateY(-50px);
         }
     </style>
+    <script>
+        document.addEventListener('scroll', () => {
+            const hero = document.querySelector('.hero');
+            const heroRect = hero.getBoundingClientRect();
+            if (heroRect.top <= window.innerHeight && heroRect.bottom >= 0) {
+                hero.classList.add('show');
+            } else {
+                hero.classList.remove('show');
+            }
+
+            const models = document.querySelectorAll('.model');
+            models.forEach(model => {
+                const rect = model.getBoundingClientRect();
+                if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                    model.classList.add('show');
+                    model.classList.remove('hide');
+                } else if (rect.top > window.innerHeight) {
+                    model.classList.remove('show');
+                    model.classList.remove('hide');
+                } else {
+                    model.classList.remove('show');
+                    model.classList.add('hide');
+                }
+            });
+        });
+
+        document.querySelectorAll('.model button').forEach(button => {
+            button.addEventListener('click', function () {
+                const model = this.closest('.model');
+                const modelName = model.querySelector('h3').textContent;
+                const modelImg = model.querySelector('img').src;
+
+                // Stocker les informations dans localStorage
+                localStorage.setItem('modelName', modelName);
+                localStorage.setItem('modelImg', modelImg);
+
+                // Redirection vers la page des détails
+                window.location.assign('model-details.html');
+            });
+        });
+    </script>
 </head>
 <body>
     <header>
-        <h1>Bienvenue sur le Skyblog de Samaël Seronvalle</h1>
+        <h1>Montres Élégantes</h1>
     </header>
 
-    <div class="image-container">
-        <img src="C:\Users\ouall\Downloads\A8D36748-E1E3-4A9C-ACC1-33B2544D9C06.jpeg" alt="Samaël Seronvalle">
-    </div>
+    <section class="hero">
+        <h2>Découvrez l'art du temps</h2>
+    </section>
 
-    <div class="info">
-        <h2>Qui est Samaël Seronvalle ?</h2>
-        <p>Samaël Seronvalle est actuellement élève à l'école communale de Slins!</p>
-        <p>Il est ami toute sa classe qu'il aime tant !</p>
-        <p>Dans ses temps libres, Samaël aime se reposer, jouer avec ses amis aux billes mais n'est jamais dans le bureau de Mme Sylvie !</p>
-        <p>Il est le fils de François Seronvalle, et de Soledad Burnet</p>
-    </div>
+    <section class="model">
+        <h3>Astronomia Tourbillon</h3>
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30" alt="Astronomia Tourbillon">
+        <button>En savoir plus</button>
+    </section>
 
-    <footer>
-        <p>Crée par Jérome Letercier</p>
-    </footer>
+    <section class="model">
+        <h3>Epic X Chrono</h3>
+        <img src="https://images.unsplash.com/photo-1600180758895-1c61baf77a89" alt="Epic X Chrono">
+        <button>En savoir plus</button>
+    </section>
+
+    <section class="model">
+        <h3>Opera Godfather</h3>
+        <img src="https://images.unsplash.com/photo-1518544903815-7d3a3d51d5e9" alt="Opera Godfather">
+        <button>En savoir plus</button>
+    </section>
 </body>
 </html>
 
+<!-- model-details.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails du Modèle</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            color: #fff;
+            text-align: center;
+        }
+        header {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .content h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .content p {
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modelName = localStorage.getItem('modelName');
+            const modelImg = localStorage.getItem('modelImg');
+
+            document.querySelector('.content h2').textContent = modelName;
+            document.querySelector('.content img').src = modelImg;
+            document.querySelector('.content p').textContent = `Découvrez l'histoire fascinante de la ${modelName}. Créée avec une précision inégalée, cette montre représente l'aboutissement d'années d'innovation et de maîtrise horlogère.`;
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Détails du Modèle</h1>
+    </header>
+    <div class="content">
+        <img src="" alt="Montre">
+        <h2></h2>
+        <p></p>
+    </div>
+</body>
+</html>
